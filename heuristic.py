@@ -23,7 +23,7 @@ def medrosa(v:int, d:Deck) -> bool:
         c = d.counter[i]
     return (v+i)<22
 
-'''Se tem chance de aumentar o valor da mão, puxa uma carta.'''
+'''Se tem chance de aumentar o valor da mão, puxa uma carta.''' 
 def corajosa(v:int, d:Deck) -> bool:
     i = 0
     c = d.counter[i]
