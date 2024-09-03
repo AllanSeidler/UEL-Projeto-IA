@@ -11,10 +11,13 @@ class Player:
         self.heuristic = heuristic    
         self.hand_value = 0
         self.deck = deck
+        self.hand = []
     
     
     '''Puxa as primeiras duas cartas.'''
     def start(self):
+        self.is_stand = False
+        self.hand.clear()
         self.draw_card()
         self.draw_card()
 
@@ -23,8 +26,8 @@ class Player:
     '''Define o valor da mão puxando cartas do deck até que uma ação de stand seja feita.'''
     def set_hand(self) -> int: # dar um nome melhor
         while self.is_stand == False:
-            if(self.heuristic(self.hand.value)):
-                self.draw_card(self,self.deck)
+            if(self.heuristic(self.hand_value,self.deck)):
+                self.draw_card()
             else:
                 self.is_stand=True
         
@@ -32,12 +35,22 @@ class Player:
     
 
     '''Puxa uma carta do deck e já verifica e processa os 'ás'.'''
-    def draw_card(self,deck: Deck):
-        card = deck.draw()
-        if(card==11):
-            if(self.value>10):
-                card=1
-        self.value+=card
+    def draw_card(self):
+        card = self.deck.draw()
+        self.hand_value+=card
+        self.hand.append(card)
+        if (self.hand_value>21):
+            self.reduce_hand_value()
+
+    
+    def reduce_hand_value(self):
+        l = len(self.hand)
+        i = 0
+        while (i<l) and (self.hand_value>21):
+            if self.hand[i]==11:
+                self.hand[i]=1
+            i+=1
+
     
     
     '''Retorna o valor da mão. 0 se maior que 21.'''
@@ -50,26 +63,27 @@ class Player:
     
     '''Limpa a mão removendo todas as cartas.'''
     def clear_hand(self):
-        self.value=0
+        self.hand_value=0
 
 
 
 '''É um tipo especifico de player.'''
 class Dealer(Player):
     def __init__(self, deck: Deck):
-        super().__init__(true_dealer,deck) # a heuristica é sempre true_dealer
+        super().__init__(dealer_verdadeiro,deck) # a heuristica é sempre true_dealer
         self.secret_card = 0
         
 
     '''Mantem uma das cartas iniciais em segredo.'''
     def start(self):
+        self.hand.clear()
         self.draw_card
         self.secret_card = self.deck.draw()
     
 
     '''Soma o valor da carta secreta e procede normalmente.'''
     def set_hand(self) -> int:
-        self.value+=self.secret_card
+        self.hand_value+=self.secret_card
         return super().set_hand()
 
 
