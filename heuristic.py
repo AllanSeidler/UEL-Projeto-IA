@@ -65,5 +65,5 @@ def moda(v:int, d:Deck) -> bool:
     for i in range(10):
         if d.counter[i] > d.counter[c]:
             c=i
-    return (c+1+v)<22    
+    return (c+1+v)<22
 
